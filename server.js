@@ -62,7 +62,7 @@ io.on("connection", socket => {
         interval = setInterval(() => {
             game.update()
             io.emit("gameState", game)
-        })
+        }, 5)
     }
 
     if (io.sockets.sockets.size === 1) gameInterval()
