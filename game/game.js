@@ -38,6 +38,8 @@ export default class Game {
 
             if (player.lifebar.lives < 1) this.players.splice(playerIndex, 1)
 
+            if (!this.boss) return
+
             this.boss.bullets.forEach((bullet, bulletIndex) => {
                 if (!this.boss) return
                 if (detectCollisionBetweenTwoObjects(bullet.position.x, bullet.position.y, bullet.scale.width, bullet.scale.height, player.position.x, player.position.y, player.scale.width, player.scale.height)) {
@@ -46,12 +48,11 @@ export default class Game {
                 }
             })
 
-            if (!this.boss) return
             if (detectCollisionBetweenTwoObjects(this.boss.laser.position.x, this.boss.laser.position.y, this.boss.laser.scale.width, this.boss.laser.scale.height, player.position.x, player.position.y, player.scale.width, player.scale.height)) {
                 player.lifebar.damage(1)
             }
+            
+            if (this.boss?.lifebar.lives < 1) delete this.boss
         })
-
-        if (this.boss.lifebar.lives < 1) delete this.boss
     }
 }

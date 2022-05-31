@@ -110,7 +110,7 @@ const gameUpdate = () => {
             ctx.fillRect(clientPlayer.lifebar.position.x, clientPlayer.lifebar.position.y, clientPlayer.lifebar.scale.width, clientPlayer.lifebar.scale.height)
         }
     }
-
+    if (!game.boss) return
     drawImage(assets.boss, game.boss)
     game.boss.bullets.forEach(bullet => {
         drawImage(assets.bossBullet, bullet)

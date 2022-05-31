@@ -4,6 +4,9 @@ import { createServer } from "http"
 import { join, dirname } from "path"
 import { fileURLToPath } from "url"
 import Game from "./game/game.js"
+import { config } from "dotenv"
+
+config()
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const PORT = process.env.PORT || 3000
@@ -15,17 +18,23 @@ const io = new SocketServer(server)
 app.use(express.static(join(__dirname, "/client")))
 
 let game = new Game()
-let interval
+let interval, player
 
 io.on("connection", socket => {
     const uid = socket.id
+    let dead
     console.log(`A client just connected! Client UID: ${uid}`)
+
+    socket.on("player-dead", () => {
+        if (io.sockets.sockets.size > 1) dead = true
+    })
 
     socket.emit("uid", uid)
 
     if (io.sockets.sockets.size > 2) return socket.emit("TooManyPlayers")
 
     socket.on("input", ({keyboard, gamepad}) => {
+        if (dead) return
         player.angle = gamepad.angle
         player.speed = {
             x: gamepad.speedX * player.maxSpeed.x,
@@ -67,7 +76,9 @@ io.on("connection", socket => {
 
     if (io.sockets.sockets.size === 1) gameInterval()
 
-    const player = game.createPlayer(uid)
+    if (!dead) {
+        player = game.createPlayer(uid)
+    }
 
     socket.on("disconnect", reason => {
         game.deletePlayer(uid)
