@@ -62,7 +62,7 @@ io.on("connection", socket => {
         interval = setInterval(() => {
             game.update()
             io.emit("gameState", game)
-        }, 3)
+        }, process.env.NODE_ENV === "production" ? 4 : 0)
     }
 
     if (io.sockets.sockets.size === 1) gameInterval()
