@@ -89,7 +89,7 @@ const gameUpdate = () => {
         player?.bullets.forEach(bullet => {
             drawImage(assets.redBullet, bullet)
         })
-        if (player.lifebar.lives < 5) {
+        if (player.lifebar.lives < player.maxLife) {
             ctx.fillStyle = "red"
             ctx.fillRect(player.lifebar.position.x, player.lifebar.position.y, player.lifebar.scale.width, player.lifebar.scale.height)
         }
@@ -101,7 +101,7 @@ const gameUpdate = () => {
         clientPlayer.bullets.forEach(bullet => {
             drawImage(assets.blueBullet, bullet)
         })
-        if (clientPlayer.lifebar.lives < 5) {
+        if (clientPlayer.lifebar.lives < clientPlayer.maxLife) {
             ctx.fillStyle = "blue",
             ctx.fillRect(clientPlayer.lifebar.position.x, clientPlayer.lifebar.position.y, clientPlayer.lifebar.scale.width, clientPlayer.lifebar.scale.height)
         }
@@ -117,7 +117,7 @@ const gameUpdate = () => {
     game.boss.bullets.forEach(bullet => {
         drawImage(assets.bossBullet, bullet)
     })
-    if (game.boss.lifebar.lives < 100) {
+    if (game.boss.lifebar.lives < game.boss.maxLife) {
         ctx.fillStyle = "red"
         const lifebar = game.boss.lifebar
         ctx.fillRect(lifebar.position.x, lifebar.position.y, lifebar.scale.width, lifebar.scale.height)

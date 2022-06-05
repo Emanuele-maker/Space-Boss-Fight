@@ -21,12 +21,13 @@ export default class Player {
             y: 0
         }
         this.maxSpeed = {
-            x: 1.8,
+            x: 2.2,
             y: 1.8
         }
         this.spawnBulletFriction = 5
         this.spawnBulletFrameCount = 0
-        this.lifebar = new Lifebar(this.position.x + this.scale.width / 2 - 5 * 15 / 2, this.position.y - 10, 15, 10, 5)
+        this.maxLife = 10
+        this.lifebar = new Lifebar(this.position.x + this.scale.width / 2 - 5 * 15 / 2, this.position.y - 10, 10, 10, this.maxLife)
         this.dead = false
         this.bullets = []
     }
