@@ -36,7 +36,7 @@ export default class Game {
                 }
             })
 
-            if (player.lifebar.lives < 1) this.players.splice(playerIndex, 1)
+            if (player.dead && this.players.length < 2) this.players.splice(playerIndex)
 
             if (!this.boss) return
 

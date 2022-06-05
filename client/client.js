@@ -11,10 +11,6 @@ socket.on("uid", (id) => {
     uid = id
 })
 
-socket.on("TooManyPlayers", () => {
-    alert("Ci sono troppi giocatori!")
-})
-
 socket.on("gameState", state => game = state)
 
 const canvas = document.getElementById("canvas")
@@ -86,9 +82,9 @@ const gameUpdate = () => {
     ctx.drawImage(assets.background, 0, 0, canvas.width, canvas.height)
 
     const clientPlayer = game.players.find(player => player.id === uid)
-    const otherPlayers = game.players.filter(p1 => p1 !== clientPlayer)
+    const otherAlivePlayers = game.players.filter(p1 => p1 !== clientPlayer && !p1.dead)
 
-    otherPlayers.forEach(player => {
+    otherAlivePlayers.forEach(player => {
         drawImage(assets.redShip, player)
         player?.bullets.forEach(bullet => {
             drawImage(assets.redBullet, bullet)
@@ -99,7 +95,7 @@ const gameUpdate = () => {
         }
     })
 
-    if (clientPlayer) {
+    if (clientPlayer && !clientPlayer.dead) {
         ctx.fillStyle = "white"
         drawImage(assets.blueShip, clientPlayer)
         clientPlayer.bullets.forEach(bullet => {
@@ -110,6 +106,12 @@ const gameUpdate = () => {
             ctx.fillRect(clientPlayer.lifebar.position.x, clientPlayer.lifebar.position.y, clientPlayer.lifebar.scale.width, clientPlayer.lifebar.scale.height)
         }
     }
+
+    if (clientPlayer?.dead) {
+        ctx.fillStyle = "white"
+        ctx.fillText("Respawnerai tra 15 secondi", GAME_WIDTH / 2, GAME_HEIGHT - 70)
+    }
+
     if (!game.boss) return
     drawImage(assets.boss, game.boss)
     game.boss.bullets.forEach(bullet => {

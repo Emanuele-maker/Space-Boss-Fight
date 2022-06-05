@@ -1,6 +1,7 @@
 import Bullet from "./bullet.js"
 import { GAME_WIDTH, GAME_HEIGHT } from "./constants.js"
 import Lifebar from "./lifebar.js"
+import startTimer from "./time.js"
 
 const isFloat = (n) => {
     return Number(n) === n && n % 1 !== 0
@@ -26,6 +27,7 @@ export default class Player {
         this.spawnBulletFriction = 5
         this.spawnBulletFrameCount = 0
         this.lifebar = new Lifebar(this.position.x + this.scale.width / 2 - 5 * 15 / 2, this.position.y - 10, 15, 10, 5)
+        this.dead = false
         this.bullets = []
     }
     createBullet() {
@@ -37,6 +39,14 @@ export default class Player {
         }
     }
     update() {
+        if (this.dead) return
+        if (this.lifebar.lives < 1) {
+            this.dead = true
+            this.lifebar.lives = 5
+            startTimer(15, () => this.dead = false)
+            return
+        }
+
         if (isFloat(this.angle)) this.speed = {
             x: .5,
             y: .5

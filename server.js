@@ -17,24 +17,17 @@ const io = new SocketServer(server)
 
 app.use(express.static(join(__dirname, "/client")))
 
-let game = new Game()
-let interval, player
+let game = new Game(), interval
 
 io.on("connection", socket => {
     const uid = socket.id
-    let dead
     console.log(`A client just connected! Client UID: ${uid}`)
-
-    socket.on("player-dead", () => {
-        if (io.sockets.sockets.size > 1) dead = true
-    })
 
     socket.emit("uid", uid)
 
-    if (io.sockets.sockets.size > 2) return socket.emit("TooManyPlayers")
+    const player = game.createPlayer(uid)
 
     socket.on("input", ({keyboard, gamepad}) => {
-        if (dead) return
         player.angle = gamepad.angle
         player.speed = {
             x: gamepad.speedX * player.maxSpeed.x,
@@ -75,10 +68,6 @@ io.on("connection", socket => {
     }
 
     if (io.sockets.sockets.size === 1) gameInterval()
-
-    if (!dead) {
-        player = game.createPlayer(uid)
-    }
 
     socket.on("disconnect", reason => {
         game.deletePlayer(uid)
