@@ -38,7 +38,7 @@ export default class Boss {
                 height: 0
             }
         }
-        this.lifebar = new Lifebar(0, 0, 5, 10, 100)
+        this.lifebar = new Lifebar(0, 0, 5, 10, 500)
         this.speed.x = this.maxSpeed.x
     }
     createBullets() {
