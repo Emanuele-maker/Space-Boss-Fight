@@ -43,7 +43,7 @@ export default class Player {
         if (this.dead) return
         if (this.lifebar.lives < 1) {
             this.dead = true
-            this.lifebar.lives = 5
+            this.lifebar.lives = this.maxLife
             startTimer(15, () => this.dead = false)
             return
         }
